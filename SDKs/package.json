@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@ai-sdk/google": "^2.0.26",
-    "ai": "^5.0.86",
-    "dotenv": "^17.2.3"
-  }
-}
