@@ -1,47 +1,20 @@
-import random
-import timeit
-import functools
+import requests
 
-def sum_digits(numbers):
-    if numbers not in sum_digits.my_cache:
-        sum_digits.my_cache[numbers] = sum(
-            int(digit) for number in numbers for digit in str(number)
-        )
-    return sum_digits.my_cache[numbers]
-sum_digits.my_cache = {}
+cache = dict()
 
-numbers = tuple(random.randint(1, 1000) for _ in range(1_000_000))
+def get_article_from_server(url):
+    print("Fetching article from server...")
+    response = requests.get(url)
+    return response.status_code
 
-print(
-    timeit.timeit(
-        "sum_digits(numbers)",
-        globals=globals(),
-        number=1
-    )
-)
+def get_article(url):
+    print("Getting article...")
+    if url not in cache:
+        cache[url] = get_article_from_server(url) 
+    return cache[url]
 
-print(
-    timeit.timeit(
-        "sum_digits(numbers)",
-        globals=globals(),
-        number=1
-    )
+get_article("https://realpython.com/sorting-algorithms-python/")
+get_article("https://realpython.com/lru-cache-python/")
+get_article("https://realpython.com/sorting-algorithms-python/")
 
-
-sum = functools.cache(sum)
-
-print(
-    timeit.timeit(
-        "sum(range(100_000_001))",
-        globals=globals(),
-        number=1,
-    )
-)
-
-print(
-    timeit.timeit(
-        "sum(range(100_000_001))",
-        globals=globals(),
-        number=1,
-    )
-)
+print(cache)
